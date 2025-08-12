@@ -1696,186 +1696,186 @@ GET /api/bulk-check/filtered/urls?progress_id=bulk_123&status=failed
         <div id="engine" class="section engine">
             <h2><i class="fas fa-cog icon"></i> Link Checking Engine</h2>
             
-            <h3><i class="fas fa-rocket"></i> LinkChecker V4 - Sistema de Detección Inteligente</h3>
+            <h3><i class="fas fa-rocket"></i> LinkChecker V4 - Intelligent Detection System</h3>
             
             <div class="info">
-                <i class="fas fa-info-circle"></i> <strong>Versión Actual:</strong> V4 con sistema de puntuación inteligente y detección automática de directorios
+                <i class="fas fa-info-circle"></i> <strong>Current Version:</strong> V4 with intelligent scoring system and automatic directory detection
             </div>
             
-            <h4><i class="fas fa-route"></i> Arquitectura Multi-Estratégica</h4>
+            <h4><i class="fas fa-route"></i> Multi-Strategy Architecture</h4>
             <div class="tech-grid">
                 <div class="tech-card">
                     <h5><i class="fas fa-bolt"></i> Fast HTTP Check</h5>
-                    <p>Análisis HTML inicial sin automatización de navegador para máxima velocidad. Procesa hasta 51462 caracteres por página.</p>
+                    <p>Initial HTML parsing without browser automation for maximum speed. Processes up to 51462 characters per page.</p>
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-search"></i> Fast Path A</h5>
-                    <p>Búsqueda directa en DOM para enlaces de negocios objetivo con validación de URL. Detección específica de ZenBusiness y patrones similares.</p>
+                    <p>Direct DOM search for target business links with URL validation. Specific detection for ZenBusiness and similar patterns.</p>
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-code"></i> Fast Path B</h5>
-                    <p>Detección basada en selectores CSS para patrones comunes de directorios de negocios.</p>
+                    <p>CSS selector-based detection for common business directory patterns.</p>
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-text-height"></i> Fast Path C</h5>
-                    <p>Coincidencia de patrones de texto para extracción de anchor text y URLs.</p>
+                    <p>Text pattern matching for anchor text and URL extraction.</p>
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-mouse-pointer"></i> Fast Path D</h5>
-                    <p>Interacción compleja de página con Playwright para contenido dinámico.</p>
+                    <p>Complex page interaction with Playwright for dynamic content.</p>
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-keyboard"></i> Search Strategy</h5>
-                    <p>Detección dinámica de campos de búsqueda y ejecución para contenido oculto.</p>
+                    <p>Dynamic search field detection and execution for hidden content.</p>
                 </div>
             </div>
             
-            <h4><i class="fas fa-brain"></i> Sistema de Puntuación Inteligente</h4>
-            <p>El LinkCheckerV4 implementa un sistema de puntuación sofisticado que evalúa automáticamente la relevancia de cada enlace encontrado:</p>
+            <h4><i class="fas fa-brain"></i> Intelligent Scoring System</h4>
+            <p>LinkCheckerV4 implements a sophisticated scoring system that automatically evaluates the relevance of each link found:</p>
             
             <div class="tech-grid">
                 <div class="tech-card">
-                    <h5><i class="fas fa-trophy"></i> Priority 1: Coincidencia Exacta</h5>
-                    <p><strong>Score: +100</strong> - Texto exacto del enlace = nombre del negocio</p>
-                    <div class="code-block">Ejemplo: "ZenBusiness" = "ZenBusiness" → Score: 100</div>
+                    <h5><i class="fas fa-trophy"></i> Priority 1: Exact Match</h5>
+                    <p><strong>Score: +100</strong> - Exact link text = business name</p>
+                    <div class="code-block">Example: "ZenBusiness" = "ZenBusiness" → Score: 100</div>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-star"></i> Priority 1.5: Caso Especial ZenBusiness</h5>
-                    <p><strong>Score: Variable</strong> - Solo si contiene "zen" Y es una página de negocio</p>
-                    <div class="code-block">Requisitos: texto/URL contiene "zen" + URL contiene /member/, /business/, o /company/</div>
+                    <h5><i class="fas fa-star"></i> Priority 1.5: ZenBusiness Special Case</h5>
+                    <p><strong>Score: Variable</strong> - Only if contains "zen" AND is a business page</p>
+                    <div class="code-block">Requirements: text/URL contains "zen" + URL contains /member/, /business/, or /company/</div>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-search"></i> Priority 2: Contiene Nombre del Negocio</h5>
-                    <p><strong>Score: +50</strong> - Texto del enlace contiene el nombre del negocio</p>
-                    <div class="code-block">Ejemplo: "ZenBusiness Solutions" contiene "ZenBusiness" → Score: 50</div>
+                    <h5><i class="fas fa-search"></i> Priority 2: Contains Business Name</h5>
+                    <p><strong>Score: +50</strong> - Link text contains the business name</p>
+                    <div class="code-block">Example: "ZenBusiness Solutions" contains "ZenBusiness" → Score: 50</div>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-link"></i> Priority 3: URL Contiene Nombre del Negocio</h5>
-                    <p><strong>Score: +30</strong> - URL contiene el nombre del negocio + debe ser página de negocio</p>
-                    <div class="code-block">Ejemplo: https://.../member/adidas-sports para "Adidas" → Score: 30</div>
+                    <h5><i class="fas fa-link"></i> Priority 3: URL Contains Business Name</h5>
+                    <p><strong>Score: +30</strong> - URL contains business name + must be business page</p>
+                    <div class="code-block">Example: https://.../member/adidas-sports for "Adidas" → Score: 30</div>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-building"></i> Priority 4: Enlaces de Páginas de Negocios</h5>
-                    <p><strong>Score base: +20</strong> por /member/, +15 por /business/, +15 por /company/</p>
-                    <div class="code-block">Bonificaciones: +100 por coincidencia exacta, +50 por contiene, +30 por URL</div>
+                    <h5><i class="fas fa-building"></i> Priority 4: Business Page Links</h5>
+                    <p><strong>Base score: +20</strong> for /member/, +15 for /business/, +15 for /company/</p>
+                    <div class="code-block">Bonuses: +100 for exact match, +50 for contains, +30 for URL</div>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-life-ring"></i> Priority 5: Fallback Inteligente</h5>
-                    <p><strong>Score base: +10</strong> por ser enlace de negocio + bonificaciones por texto largo</p>
-                    <div class="code-block">Penalizaciones: -40 por términos genéricos, -30 por navegación</div>
+                    <h5><i class="fas fa-life-ring"></i> Priority 5: Intelligent Fallback</h5>
+                    <p><strong>Base score: +10</strong> for being business link + bonuses for long text</p>
+                    <div class="code-block">Penalties: -40 for generic terms, -30 for navigation</div>
                 </div>
             </div>
             
-            <h4><i class="fas fa-sitemap"></i> Detección Automática de Directorios</h4>
-            <p>El sistema detecta automáticamente cuando una URL es un directorio que necesita seguimiento de enlaces:</p>
+            <h4><i class="fas fa-sitemap"></i> Automatic Directory Detection</h4>
+            <p>The system automatically detects when a URL is a directory that requires link following:</p>
             
             <div class="tech-grid">
                 <div class="tech-card">
-                    <h5><i class="fas fa-list"></i> Patrones de Directorio Detectados</h5>
+                    <h5><i class="fas fa-list"></i> Detected Directory Patterns</h5>
                     <ul>
-                        <li><code>/list/</code> - Listados de negocios</li>
-                        <li><code>/searchalpha/</code> - Filtros alfabéticos</li>
-                        <li><code>/directory/</code> - Directorios generales</li>
-                        <li><code>/members/</code> - Páginas de miembros</li>
-                        <li><code>/business/</code> - Páginas de negocios</li>
+                        <li><code>/list/</code> - Business listings</li>
+                        <li><code>/searchalpha/</code> - Alphabetical filters</li>
+                        <li><code>/directory/</code> - General directories</li>
+                        <li><code>/members/</code> - Member pages</li>
+                        <li><code>/business/</code> - Business pages</li>
                     </ul>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-mouse-pointer"></i> Seguimiento Automático de Enlaces</h5>
+                    <h5><i class="fas fa-mouse-pointer"></i> Automatic Link Following</h5>
                     <ul>
-                        <li><strong>Detección inteligente</strong> de enlaces del mismo dominio</li>
-                        <li><strong>Filtrado automático</strong> de enlaces de navegación</li>
-                        <li><strong>Seguimiento seguro</strong> solo a páginas de negocios</li>
-                        <li><strong>Validación en página destino</strong> del target URL</li>
+                        <li><strong>Intelligent detection</strong> of same-domain links</li>
+                        <li><strong>Automatic filtering</strong> of navigation links</li>
+                        <li><strong>Safe following</strong> only to business pages</li>
+                        <li><strong>Destination page validation</strong> of target URL</li>
                     </ul>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-shield-alt"></i> Seguridad y Validación</h5>
+                    <h5><i class="fas fa-shield-alt"></i> Security and Validation</h5>
                     <ul>
-                        <li><strong>Solo enlaces del mismo dominio</strong> (evita redirecciones maliciosas)</li>
-                        <li><strong>Timeout de 30 segundos</strong> para navegación a páginas de negocios</li>
-                        <li><strong>Manejo de errores robusto</strong> con logging detallado</li>
-                        <li><strong>Validación de patrones de URL</strong> antes de seguir enlaces</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <h4><i class="fas fa-bug"></i> Casos Especiales y Mejoras</h4>
-            <div class="tech-grid">
-                <div class="tech-card">
-                    <h5><i class="fas fa-zen"></i> Caso Especial: ZenBusiness</h5>
-                    <p>Detección específica para patrones comunes de ZenBusiness con validación de páginas de negocio.</p>
-                    <div class="code-block">Ejemplo: /list/searchalpha/z → /list/member/zenbusiness-1074</div>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-exclamation-triangle"></i> Detección de URLs Mal Formadas</h5>
-                    <p>Identificación automática de URLs con protocolos duplicados o formato incorrecto.</p>
-                    <div class="code-block">Ejemplo: "http://https//www.zenbusiness.com/" → Wrong Target URL</div>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-chart-line"></i> Sistema de Fallback Inteligente</h5>
-                    <p>Múltiples estrategias de respaldo con puntuación automática para casos complejos.</p>
-                    <div class="code-block">Score mínimo: 0, Score recomendado: >25</div>
-                </div>
-            </div>
-            
-            <h4><i class="fas fa-tools"></i> Logging y Debugging Avanzado</h4>
-            <p>El sistema proporciona logging detallado para debugging y monitoreo:</p>
-            
-            <div class="tech-grid">
-                <div class="tech-card">
-                    <h5><i class="fas fa-list-ul"></i> Logs de Enlaces Encontrados</h5>
-                    <p>Registro completo de todos los enlaces en la página con información detallada (texto, href, clase, ID).</p>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-calculator"></i> Puntuaciones en Tiempo Real</h5>
-                    <p>Visualización de puntuaciones de cada enlace candidato para debugging y optimización.</p>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-route"></i> Seguimiento de Estrategias</h5>
-                    <p>Logs detallados de cada estrategia utilizada y resultados obtenidos.</p>
-                </div>
-            </div>
-            
-            <h4><i class="fas fa-cogs"></i> Configuración y Rendimiento</h4>
-            <div class="tech-grid">
-                <div class="tech-card">
-                    <h5><i class="fas fa-clock"></i> Timeouts y Límites</h5>
-                    <ul>
-                        <li><strong>Timeout global:</strong> 120 segundos por verificación</li>
-                        <li><strong>Timeout de navegación:</strong> 30 segundos para páginas de negocios</li>
-                        <li><strong>Timeout de iframe:</strong> 5 segundos para contenido de iframe</li>
-                        <li><strong>Límite de profundidad:</strong> Máximo 3 niveles para iframes</li>
-                    </ul>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-users"></i> Concurrencia y Escalabilidad</h5>
-                    <ul>
-                        <li><strong>Modo HEADED:</strong> 4 solicitudes concurrentes (optimizado para navegadores visuales)</li>
-                        <li><strong>Modo HEADLESS:</strong> 10 solicitudes concurrentes</li>
-                        <li><strong>Browserless:</strong> 10 solicitudes concurrentes (límite de tasa seguro)</li>
-                        <li><strong>Semáforo dinámico:</strong> Control automático de concurrencia</li>
+                        <li><strong>Same-domain links only</strong> (prevents malicious redirects)</li>
+                        <li><strong>30-second timeout</strong> for business page navigation</li>
+                        <li><strong>Robust error handling</strong> with detailed logging</li>
+                        <li><strong>URL pattern validation</strong> before following links</li>
                     </ul>
                 </div>
             </div>
             
-            <h4><i class="fas fa-chart-bar"></i> Métricas de Rendimiento</h4>
+            <h4><i class="fas fa-bug"></i> Special Cases and Improvements</h4>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h5><i class="fas fa-zen"></i> Special Case: ZenBusiness</h5>
+                    <p>Specific detection for common ZenBusiness patterns with business page validation.</p>
+                    <div class="code-block">Example: /list/searchalpha/z → /list/member/zenbusiness-1074</div>
+                </div>
+                <div class="tech-card">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Malformed URL Detection</h5>
+                    <p>Automatic identification of URLs with duplicate protocols or incorrect format.</p>
+                    <div class="code-block">Example: "http://https//www.zenbusiness.com/" → Wrong Target URL</div>
+                </div>
+                <div class="tech-card">
+                    <h5><i class="fas fa-chart-line"></i> Intelligent Fallback System</h5>
+                    <p>Multiple fallback strategies with automatic scoring for complex cases.</p>
+                    <div class="code-block">Minimum score: 0, Recommended score: >25</div>
+                </div>
+            </div>
+            
+            <h4><i class="fas fa-tools"></i> Advanced Logging and Debugging</h4>
+            <p>The system provides detailed logging for debugging and monitoring:</p>
+            
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h5><i class="fas fa-list-ul"></i> Found Links Logs</h5>
+                    <p>Complete record of all links on the page with detailed information (text, href, class, ID).</p>
+                </div>
+                <div class="tech-card">
+                    <h5><i class="fas fa-calculator"></i> Real-time Scoring</h5>
+                    <p>Visualization of scores for each candidate link for debugging and optimization.</p>
+                </div>
+                <div class="tech-card">
+                    <h5><i class="fas fa-route"></i> Strategy Tracking</h5>
+                    <p>Detailed logs of each strategy used and results obtained.</p>
+                </div>
+            </div>
+            
+            <h4><i class="fas fa-cogs"></i> Configuration and Performance</h4>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h5><i class="fas fa-clock"></i> Timeouts and Limits</h5>
+                    <ul>
+                        <li><strong>Global timeout:</strong> 120 seconds per verification</li>
+                        <li><strong>Navigation timeout:</strong> 30 seconds for business pages</li>
+                        <li><strong>Iframe timeout:</strong> 5 seconds for iframe content</li>
+                        <li><strong>Depth limit:</strong> Maximum 3 levels for iframes</li>
+                    </ul>
+                </div>
+                <div class="tech-card">
+                    <h5><i class="fas fa-users"></i> Concurrency and Scalability</h5>
+                    <ul>
+                        <li><strong>HEADED mode:</strong> 4 concurrent requests (optimized for visual browsers)</li>
+                        <li><strong>HEADLESS mode:</strong> 10 concurrent requests</li>
+                        <li><strong>Browserless:</strong> 10 concurrent requests (safe rate limit)</li>
+                        <li><strong>Dynamic semaphore:</strong> Automatic concurrency control</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h4><i class="fas fa-chart-bar"></i> Performance Metrics</h4>
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-number">120s</span>
-                    <div class="stat-label">Timeout Global</div>
+                    <div class="stat-label">Global Timeout</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number">30s</span>
-                    <div class="stat-label">Timeout Navegación</div>
+                    <div class="stat-label">Navigation Timeout</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number">10</span>
-                    <div class="stat-label">Concurrente Max</div>
+                    <div class="stat-label">Max Concurrent</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number">3</span>
-                    <div class="stat-label">Niveles Iframe</div>
+                    <div class="stat-label">Iframe Levels</div>
                 </div>
             </div>
         </div>
