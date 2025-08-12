@@ -6,6 +6,14 @@
     <title>Link Checker Technical Documentation</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root{
+            --cl-ink:#0b1a2b;
+            --cl-blue:#0ea5e9;
+            --cl-cyan:#22d3ee;
+            --cl-deep:#0b1020;
+            --cl-bg:#f6f9fc;
+            --cl-card:#ffffff;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -15,8 +23,8 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--cl-ink);
+            background: var(--cl-bg);
             min-height: 100vh;
         }
         
@@ -24,21 +32,24 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: var(--cl-card);
+            box-shadow: 0 10px 30px rgba(11,16,32,0.08);
             border-radius: 15px;
             margin-top: 20px;
             margin-bottom: 20px;
         }
+        .topnav {display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-radius:12px;margin-bottom:16px;background:linear-gradient(135deg,var(--cl-deep),#101b35);color:white;}
+        .topnav .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3px}
+        .topnav .actions a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:#002b3b;background:linear-gradient(135deg,var(--cl-cyan),var(--cl-blue));padding:8px 14px;border-radius:999px;font-weight:600;box-shadow:0 6px 16px rgba(14,165,233,.25)}
         
         .header {
             text-align: center;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(135deg, var(--cl-blue) 0%, var(--cl-cyan) 100%);
             color: white;
             padding: 40px 20px;
             border-radius: 15px;
             margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+            box-shadow: 0 8px 25px rgba(14,165,233,0.35);
         }
         
         .header h1 {
@@ -108,27 +119,28 @@
             transform: translateY(-3px);
         }
         
-        .section.overview { background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%); }
-        .section.tech-stack { background: linear-gradient(135deg, #f093fb20 0%, #f5576c20 100%); }
-        .section.database { background: linear-gradient(135deg, #4facfe20 0%, #00f2fe20 100%); }
-        .section.api { background: linear-gradient(135deg, #43e97b20 0%, #38f9d720 100%); }
-        .section.engine { background: linear-gradient(135deg, #fa709a20 0%, #fee14020 100%); }
-        .section.deployment { background: linear-gradient(135deg, #a8edea20 0%, #fed6e320 100%); }
-        .section.performance { background: linear-gradient(135deg, #ff9a9e20 0%, #fecfef20 100%); }
-        .section.monitoring { background: linear-gradient(135deg, #ffecd220 0%, #fcb69f20 100%); }
-        .section.integration { background: linear-gradient(135deg, #a18cd120 0%, #fbc2eb20 100%); }
-        .section.security { background: linear-gradient(135deg, #fdbb2d20 0%, #22c1c320 100%); }
+        .section.overview { background: linear-gradient(135deg, #0ea5e91a 0%, #22d3ee1a 100%); }
+        .section.tech-stack { background: linear-gradient(135deg, #0b1a2b0f 0%, #0ea5e90f 100%); }
+        .section.database { background: linear-gradient(135deg, #22d3ee1a 0%, #0ea5e91a 100%); }
+        .section.api { background: linear-gradient(135deg, #16a34a1a 0%, #22d3ee1a 100%); }
+        .section.engine { background: linear-gradient(135deg, #0ea5e91a 0%, #22d3ee1a 100%); }
+        .section.deployment { background: linear-gradient(135deg, #0b1a2b0f 0%, #22d3ee0f 100%); }
+        .section.performance { background: linear-gradient(135deg, #0ea5e91a 0%, #0b1a2b0f 100%); }
+        .section.monitoring { background: linear-gradient(135deg, #22d3ee1a 0%, #0ea5e91a 100%); }
+        .section.integration { background: linear-gradient(135deg, #0b1a2b0f 0%, #22d3ee0f 100%); }
+        .section.security { background: linear-gradient(135deg, #0ea5e91a 0%, #22d3ee1a 100%); }
         .section.troubleshooting { background: linear-gradient(135deg, #e96443 20 0%, #904e9520 100%); }
         
         h2 {
-            color: #2c3e50;
+            color: #13223b;
             font-size: 2.2em;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 15px;
             padding-bottom: 10px;
-            border-bottom: 3px solid #4facfe;
+            border-image: linear-gradient(90deg,var(--cl-blue),var(--cl-cyan)) 1;
+            border-bottom: 3px solid transparent;
         }
         
         h3 {
@@ -169,11 +181,12 @@
         }
         
         .tech-card {
-            background: white;
+            background: var(--cl-card);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-left: 5px solid #4facfe;
+            box-shadow: 0 4px 15px rgba(11,16,32,0.08);
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg,var(--cl-blue),var(--cl-cyan)) 1;
             transition: all 0.3s ease;
         }
         
@@ -413,15 +426,21 @@
             color: white;
         }
         
-        .badge.primary { background: #007bff; }
-        .badge.success { background: #28a745; }
-        .badge.warning { background: #ffc107; color: #333; }
-        .badge.danger { background: #dc3545; }
-        .badge.info { background: #17a2b8; }
+        .badge.primary { background: var(--cl-blue); }
+        .badge.success { background: #16a34a; }
+        .badge.warning { background: #fbbf24; color: #111827; }
+        .badge.danger { background: #ef4444; }
+        .badge.info { background: var(--cl-cyan); color:#003041; }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="topnav">
+            <div class="brand"><i class="fas fa-flask"></i> LinkChecker Docs</div>
+            <div class="actions">
+                <a href="#api"><i class="fas fa-plug"></i> API</a>
+            </div>
+        </div>
         <div class="header">
             <h1><i class="fas fa-link"></i> Link Checker</h1>
             <div class="subtitle">Comprehensive Technical Documentation</div>
@@ -1695,78 +1714,50 @@ GET /api/bulk-check/filtered/urls?progress_id=bulk_123&status=failed
 
         <div id="engine" class="section engine">
             <h2><i class="fas fa-cog icon"></i> Link Checking Engine</h2>
-            
-            <h3><i class="fas fa-rocket"></i> LinkChecker V4 - Intelligent Detection System</h3>
-            
+
+            <h3><i class="fas fa-rocket"></i> LinkChecker V4 – URL‑first Detection & Directory Handling</h3>
+
             <div class="info">
-                <i class="fas fa-info-circle"></i> <strong>Current Version:</strong> V4 with intelligent scoring system and automatic directory detection
+                <i class="fas fa-info-circle"></i> <strong>Current Version:</strong> V4 with URL‑first detection, strict invalid‑scheme filtering, and automatic directory handling.
+            </div>
+
+            <div style="margin:16px 0; display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="#engine-url-first" class="badge info" style="text-decoration:none;">URL‑first policy</a>
+                <a href="#engine-card-scan" class="badge primary" style="text-decoration:none;">Business card scan</a>
+                <a href="#engine-directory" class="badge success" style="text-decoration:none;">Directory flow</a>
+                <a href="#engine-iframes" class="badge warning" style="text-decoration:none; color:#333;">iFrame handling</a>
+                <a href="#engine-fallbacks" class="badge info" style="text-decoration:none;">Fallbacks & errors</a>
             </div>
             
-            <h4><i class="fas fa-route"></i> Multi-Strategy Architecture</h4>
+            <h4 id="engine-url-first"><i class="fas fa-route"></i> URL‑first Policy</h4>
             <div class="tech-grid">
                 <div class="tech-card">
                     <h5><i class="fas fa-bolt"></i> Fast HTTP Check</h5>
-                    <p>Initial HTML parsing without browser automation for maximum speed. Processes up to 51462 characters per page.</p>
+                    <p>Initial HTML parsing without browser automation for maximum speed.</p>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-search"></i> Fast Path A</h5>
-                    <p>Direct DOM search for target business links with URL validation. Enhanced detection for business-specific patterns and naming conventions.</p>
+                    <h5><i class="fas fa-search"></i> URL-first match</h5>
+                    <ul class="tech-list">
+                        <li>Scan all anchors on page and ignore invalid schemes: <code>mailto:</code>, <code>tel:</code>, <code>javascript:</code>, <code>data:</code>, <code>#</code>.</li>
+                        <li>Accept when href equals the expected target URL or shares the same hostname as the target.</li>
+                        <li>Anchor text is verified after URL. If mismatched, it is reported as <em>Wrong Anchor Text</em> without discarding the correct URL.</li>
+                    </ul>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-code"></i> Fast Path B</h5>
-                    <p>CSS selector-based detection for common business directory patterns.</p>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-text-height"></i> Fast Path C</h5>
-                    <p>Text pattern matching for anchor text and URL extraction.</p>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-mouse-pointer"></i> Fast Path D</h5>
-                    <p>Complex page interaction with Playwright for dynamic content.</p>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-keyboard"></i> Search Strategy</h5>
-                    <p>Dynamic search field detection and execution for hidden content.</p>
+                    <h5><i class="fas fa-code"></i> HTML/DOM helpers</h5>
+                    <p>Selector and text utilities to locate expected anchors and validate URL patterns.</p>
                 </div>
             </div>
+
+            <h4 id="engine-card-scan"><i class="fas fa-id-card"></i> Business Card Scan (Directory Items)</h4>
+            <ul class="tech-list">
+                <li>When a business element is detected, its <code>href</code> is validated; invalid schemes are ignored.</li>
+                <li>If invalid or mismatched, the engine scans all links within the same container ("card").</li>
+                <li>Collect only HTTP/HTTPS candidates and prefer exact hostname match with the target URL.</li>
+                <li>Do not fail on email/phone links; continue searching within the card before moving on.</li>
+            </ul>
             
-            <h4><i class="fas fa-brain"></i> Intelligent Scoring System</h4>
-            <p>LinkCheckerV4 implements a sophisticated scoring system that automatically evaluates the relevance of each link found:</p>
-            
-            <div class="tech-grid">
-                <div class="tech-card">
-                    <h5><i class="fas fa-trophy"></i> Priority 1: Exact Match</h5>
-                    <p><strong>Score: +100</strong> - Exact link text = business name</p>
-                    <div class="code-block">Example: "ZenBusiness" = "ZenBusiness" → Score: 100</div>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-star"></i> Priority 1.5: Business Name Pattern Case</h5>
-                    <p><strong>Score: Variable</strong> - Enhanced scoring for business name patterns AND business page URLs</p>
-                    <div class="code-block">Requirements: text/URL contains business name pattern + URL contains /member/, /business/, or /company/</div>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-search"></i> Priority 2: Contains Business Name</h5>
-                    <p><strong>Score: +50</strong> - Link text contains the business name</p>
-                    <div class="code-block">Example: "ZenBusiness Solutions" contains "ZenBusiness" → Score: 50</div>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-link"></i> Priority 3: URL Contains Business Name</h5>
-                    <p><strong>Score: +30</strong> - URL contains business name + must be business page</p>
-                    <div class="code-block">Example: https://.../member/adidas-sports for "Adidas" → Score: 30</div>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-building"></i> Priority 4: Business Page Links</h5>
-                    <p><strong>Base score: +20</strong> for /member/, +15 for /business/, +15 for /company/</p>
-                    <div class="code-block">Bonuses: +100 for exact match, +50 for contains, +30 for URL</div>
-                </div>
-                <div class="tech-card">
-                    <h5><i class="fas fa-life-ring"></i> Priority 5: Intelligent Fallback</h5>
-                    <p><strong>Base score: +10</strong> for being business link + bonuses for long text</p>
-                    <div class="code-block">Penalties: -40 for generic terms, -30 for navigation</div>
-                </div>
-            </div>
-            
-            <h4><i class="fas fa-sitemap"></i> Automatic Directory Detection</h4>
+            <h4 id="engine-directory"><i class="fas fa-sitemap"></i> Automatic Directory Detection</h4>
             <p>The system automatically detects when a URL is a directory that requires link following:</p>
             
             <div class="tech-grid">
@@ -1783,10 +1774,9 @@ GET /api/bulk-check/filtered/urls?progress_id=bulk_123&status=failed
                 <div class="tech-card">
                     <h5><i class="fas fa-mouse-pointer"></i> Automatic Link Following</h5>
                     <ul>
-                        <li><strong>Intelligent detection</strong> of same-domain links</li>
-                        <li><strong>Automatic filtering</strong> of navigation links</li>
-                        <li><strong>Safe following</strong> only to business pages</li>
-                        <li><strong>Destination page validation</strong> of target URL</li>
+                        <li>Select same‑domain business‑page links only (<code>/member/</code>, <code>/business/</code>, <code>/company/</code>).</li>
+                        <li>Filter out generic navigation (home, next, previous, search).</li>
+                        <li>Navigate to the candidate page in a new context and validate the target URL there.</li>
                     </ul>
                 </div>
                 <div class="tech-card">
@@ -1800,7 +1790,19 @@ GET /api/bulk-check/filtered/urls?progress_id=bulk_123&status=failed
                 </div>
             </div>
             
-            <h4><i class="fas fa-bug"></i> Special Cases and Improvements</h4>
+            <h4 id="engine-iframes"><i class="fas fa-bug"></i> iFrame Handling</h4>
+            <ul class="tech-list">
+                <li>Try Playwright <code>contentFrame()</code> to access iframe DOM when available.</li>
+                <li>Parse anchors inside iframes and apply the same URL‑first rules.</li>
+                <li>Limit depth and time to avoid blocking on third‑party widgets.</li>
+            </ul>
+
+            <h4 id="engine-fallbacks"><i class="fas fa-life-ring"></i> Fallbacks & Error Categorization</h4>
+            <ul class="tech-list">
+                <li>Fallbacks: on‑page URL scan → business card scan → directory follow → iframe search.</li>
+                <li>Error categories: <strong>Wrong Target URL</strong> → <code>target_url_wrong</code>; <strong>Anchor text mismatch</strong> → <code>anchor_text_wrong</code>.</li>
+                <li>Logs emphasize failures; successful checks minimize stored logs.</li>
+            </ul>
             <div class="tech-grid">
                 <div class="tech-card">
                     <h5><i class="fas fa-building"></i> Special Case: Business Pattern Detection</h5>
