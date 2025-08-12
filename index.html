@@ -1710,7 +1710,7 @@ GET /api/bulk-check/filtered/urls?progress_id=bulk_123&status=failed
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-search"></i> Fast Path A</h5>
-                    <p>Direct DOM search for target business links with URL validation. Specific detection for ZenBusiness and similar patterns.</p>
+                    <p>Direct DOM search for target business links with URL validation. Enhanced detection for business-specific patterns and naming conventions.</p>
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-code"></i> Fast Path B</h5>
@@ -1740,9 +1740,9 @@ GET /api/bulk-check/filtered/urls?progress_id=bulk_123&status=failed
                     <div class="code-block">Example: "ZenBusiness" = "ZenBusiness" → Score: 100</div>
                 </div>
                 <div class="tech-card">
-                    <h5><i class="fas fa-star"></i> Priority 1.5: ZenBusiness Special Case</h5>
-                    <p><strong>Score: Variable</strong> - Only if contains "zen" AND is a business page</p>
-                    <div class="code-block">Requirements: text/URL contains "zen" + URL contains /member/, /business/, or /company/</div>
+                    <h5><i class="fas fa-star"></i> Priority 1.5: Business Name Pattern Case</h5>
+                    <p><strong>Score: Variable</strong> - Enhanced scoring for business name patterns AND business page URLs</p>
+                    <div class="code-block">Requirements: text/URL contains business name pattern + URL contains /member/, /business/, or /company/</div>
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-search"></i> Priority 2: Contains Business Name</h5>
@@ -1803,14 +1803,14 @@ GET /api/bulk-check/filtered/urls?progress_id=bulk_123&status=failed
             <h4><i class="fas fa-bug"></i> Special Cases and Improvements</h4>
             <div class="tech-grid">
                 <div class="tech-card">
-                    <h5><i class="fas fa-zen"></i> Special Case: ZenBusiness</h5>
-                    <p>Specific detection for common ZenBusiness patterns with business page validation.</p>
-                    <div class="code-block">Example: /list/searchalpha/z → /list/member/zenbusiness-1074</div>
+                    <h5><i class="fas fa-building"></i> Special Case: Business Pattern Detection</h5>
+                    <p>Enhanced detection for common business naming patterns with business page validation.</p>
+                    <div class="code-block">Example: /list/searchalpha/z → /list/member/business-name-1074</div>
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-exclamation-triangle"></i> Malformed URL Detection</h5>
                     <p>Automatic identification of URLs with duplicate protocols or incorrect format.</p>
-                    <div class="code-block">Example: "http://https//www.zenbusiness.com/" → Wrong Target URL</div>
+                    <div class="code-block">Example: "http://https//www.example.com/" → Wrong Target URL</div>
                 </div>
                 <div class="tech-card">
                     <h5><i class="fas fa-chart-line"></i> Intelligent Fallback System</h5>
