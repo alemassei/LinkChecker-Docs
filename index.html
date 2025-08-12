@@ -450,7 +450,7 @@
             
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-number">50+</span>
+                    <span class="stat-number">40+</span>
                     <div class="stat-label">API Endpoints</div>
                 </div>
                 <div class="stat-card">
@@ -536,13 +536,24 @@
                     </thead>
                     <tbody>
                         <tr><td>id</td><td><span class="badge primary">UUID</span></td><td>Primary Key</td></tr>
+                        <tr><td>row_id</td><td><span class="badge info">Integer</span></td><td>Reference to CSV import row</td></tr>
                         <tr><td>business_name</td><td><span class="badge info">Text</span></td><td>Business name</td></tr>
                         <tr><td>thank_you_url</td><td><span class="badge info">Text</span></td><td>Business listing URL</td></tr>
+                        <tr><td>anchor_text</td><td><span class="badge info">Text</span></td><td>Expected link text</td></tr>
                         <tr><td>target_url</td><td><span class="badge info">Text</span></td><td>Expected destination URL</td></tr>
                         <tr><td>target_url_found</td><td><span class="badge info">Text</span></td><td>Actual URL found</td></tr>
-                        <tr><td>status</td><td><span class="badge warning">Enum</span></td><td>active, failed, processing, etc.</td></tr>
-                        <tr><td>response_time</td><td><span class="badge success">Integer</span></td><td>Check duration in ms</td></tr>
+                        <tr><td>status</td><td><span class="badge warning">Enum</span></td><td>active, failed, processing, pending, target_url_wrong, anchor_text_wrong</td></tr>
+                        <tr><td>previous_status</td><td><span class="badge warning">Enum</span></td><td>Previous status before last check</td></tr>
                         <tr><td>last_checked</td><td><span class="badge info">Timestamp</span></td><td>Last verification time</td></tr>
+                        <tr><td>fulfilled_on</td><td><span class="badge info">Timestamp</span></td><td>when the advertisement/service was published/activated</td></tr>
+                        <tr><td>response_time</td><td><span class="badge success">Integer</span></td><td>Check duration in milliseconds</td></tr>
+                        <tr><td>error_message</td><td><span class="badge warning">Text</span></td><td>Error details if check failed</td></tr>
+                        <tr><td>http_status_code</td><td><span class="badge info">Integer</span></td><td>HTTP response status code</td></tr>
+                        <tr><td>detected_anchor_text</td><td><span class="badge info">Text</span></td><td>Actual anchor text found on the page</td></tr>
+                        <tr><td>anchor_text_source</td><td><span class="badge warning">Enum</span></td><td>csv, auto, or all</td></tr>
+                        <tr><td>notes</td><td><span class="badge info">Text</span></td><td>Additional notes or comments</td></tr>
+                        <tr><td>created_at</td><td><span class="badge info">Timestamp</span></td><td>Record creation timestamp</td></tr>
+                        <tr><td>updated_at</td><td><span class="badge info">Timestamp</span></td><td>Last update timestamp</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -1071,26 +1082,587 @@ GET /api/stats/filtered?status=failed&anchorTextType=csv
                 </div>
             </div>
 
+
+
+
+            <h3><i class="fas fa-code"></i> Status Codes & Error Handling</h3>
+
+            <h3><i class="fas fa-database"></i> Data Management & Backup</h3>
+            
             <div class="endpoint-card">
                 <div class="endpoint-header">
-                    <span class="method delete">DELETE</span>
-                    <span class="endpoint-path">/api/clear-all-data</span>
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/backup/create</span>
                 </div>
-                <p><strong>Purpose:</strong> Clear all system data (URLs, logs, statistics)</p>
+                <p><strong>Purpose:</strong> Create a full backup of all system data</p>
                 
                 <h4><i class="fas fa-arrow-right"></i> Response:</h4>
                 <div class="code-block">
 {
-  "message": "All data cleared successfully"
+  "success": true,
+  "message": "Full backup completed successfully",
+  "backedUp": 1500,
+  "timestamp": "2025-01-12T10:30:00Z"
 }
-                </div>
-
-                <div class="warning">
-                    <i class="fas fa-exclamation-triangle"></i> <strong>Warning:</strong> This operation is irreversible and will delete all URL checks, logs, and statistics.
                 </div>
             </div>
 
-            <h3><i class="fas fa-code"></i> Status Codes & Error Handling</h3>
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/backup/create</span>
+                </div>
+                <p><strong>Purpose:</strong> Get backup statistics and table information</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "stats": {
+    "mainTable": 1500,
+    "backupTable": 1500
+  },
+  "timestamp": "2025-01-12T10:30:00Z"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/backup/restore</span>
+                </div>
+                <p><strong>Purpose:</strong> Emergency restore from backup (preserves all data)</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Emergency restore completed",
+  "restored": 1500,
+  "integrity": {
+    "isHealthy": true,
+    "mainTableCount": 1500,
+    "backupTableCount": 1500
+  }
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/backup/verify</span>
+                </div>
+                <p><strong>Purpose:</strong> Verify backup integrity and health</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Backup integrity check completed",
+  "integrity": {
+    "isHealthy": true,
+    "mainTableCount": 1500,
+    "backupTableCount": 1500,
+    "discrepancies": []
+  },
+  "status": "healthy"
+}
+                </div>
+            </div>
+
+            <h3><i class="fas fa-tools"></i> Testing & Development</h3>
+            
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/test-link-check</span>
+                </div>
+                <p><strong>Purpose:</strong> Test link checking functionality with custom parameters</p>
+                
+                <h4><i class="fas fa-code"></i> Request Body:</h4>
+                <div class="code-block">
+{
+  "thank_you_url": "https://example.com/thank-you",
+  "anchor_text": "Visit Website",
+  "target_url": "https://example.com"
+}
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "result": {
+    "isActive": true,
+    "statusCode": 200,
+    "responseTime": 1250,
+    "foundAnchorText": true,
+    "foundTargetLink": true,
+    "actualTargetUrl": "https://example.com/",
+    "errorMessage": null
+  },
+  "testCase": {
+    "thank_you_url": "https://example.com/thank-you",
+    "anchor_text": "Visit Website",
+    "target_url": "https://example.com",
+    "expectedToFail": true
+  }
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/initialize-sample-data</span>
+                </div>
+                <p><strong>Purpose:</strong> Initialize the system with sample data for testing</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Sample data initialized successfully",
+  "count": 5,
+  "checks": [
+    {
+      "id": "uuid-1",
+      "business_name": "TechCorp Inc",
+      "thank_you_url": "https://techcorp.com/thank-you",
+      "anchor_text": "Visit our website",
+      "target_url": "https://techcorp.com"
+    }
+  ]
+}
+                </div>
+            </div>
+
+            <h3><i class="fas fa-cog"></i> System Management</h3>
+            
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method delete">DELETE</span>
+                    <span class="endpoint-path">/api/clear-local-storage</span>
+                </div>
+                <p><strong>Purpose:</strong> Clear local storage files (logs and temporary data)</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Cleared 25 local storage files",
+  "deletedFiles": 25
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/logs</span>
+                </div>
+                <p><strong>Purpose:</strong> Retrieve system processing logs</p>
+                
+                <h4><i class="fas fa-filter"></i> Query Parameters:</h4>
+                <div class="code-block">
+GET /api/logs?limit=100
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+[
+  {
+    "id": "log-uuid",
+    "level": "info",
+    "message": "Created new URL check for Example Business",
+    "url_check_id": "url-uuid",
+    "created_at": "2025-01-12T10:30:00Z"
+  }
+]
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method delete">DELETE</span>
+                    <span class="endpoint-path">/api/logs</span>
+                </div>
+                <p><strong>Purpose:</strong> Clear all processing logs</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Logs cleared successfully"
+}
+                </div>
+            </div>
+
+            <h3><i class="fas fa-link"></i> Individual URL Management</h3>
+            
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/url-checks/[id]</span>
+                </div>
+                <p><strong>Purpose:</strong> Get a specific URL check by ID</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "id": "uuid",
+  "business_name": "Example Business",
+  "thank_you_url": "https://directory.com/business/example",
+  "anchor_text": "Visit Website",
+  "target_url": "https://www.example.com/",
+  "status": "active",
+  "last_checked": "2025-01-12T04:08:41.793Z"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method put">PUT</span>
+                    <span class="endpoint-path">/api/url-checks/[id]</span>
+                </div>
+                <p><strong>Purpose:</strong> Update a specific URL check</p>
+                
+                <h4><i class="fas fa-code"></i> Request Body:</h4>
+                <div class="code-block">
+{
+  "status": "active",
+  "notes": "Updated manually"
+}
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "id": "uuid",
+  "business_name": "Example Business",
+  "status": "active",
+  "notes": "Updated manually",
+  "updated_at": "2025-01-12T10:30:00Z"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method delete">DELETE</span>
+                    <span class="endpoint-path">/api/url-checks/[id]</span>
+                </div>
+                <p><strong>Purpose:</strong> Delete a specific URL check</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "URL check deleted successfully"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/url-checks/[id]/recheck-simple</span>
+                </div>
+                <p><strong>Purpose:</strong> Perform a simple recheck of a specific URL</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "result": {
+    "isActive": true,
+    "statusCode": 200,
+    "responseTime": 1250,
+    "foundTargetLink": true,
+    "errorMessage": null
+  },
+  "message": "Simple recheck completed successfully. Found: true"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/url-checks/[id]/recheck-beta</span>
+                </div>
+                <p><strong>Purpose:</strong> Perform a beta recheck using the beta_url_checks table</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "BETA Recheck completed",
+  "result": {
+    "isActive": true,
+    "statusCode": 200,
+    "responseTime": 1250
+  }
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/url-checks/[id]/logs</span>
+                </div>
+                <p><strong>Purpose:</strong> Get logs for a specific URL check</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "url_check_id": "uuid",
+  "logs": [
+    {
+      "level": "info",
+      "message": "Starting link check",
+      "timestamp": "2025-01-12T10:30:00Z"
+    }
+  ]
+}
+                </div>
+            </div>
+
+            <h3><i class="fas fa-chart-line"></i> Advanced Analytics</h3>
+            
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/url-checks/status-changes</span>
+                </div>
+                <p><strong>Purpose:</strong> Get statistics about status changes and recovery rates</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "data": {
+    "recovered": 45,
+    "stillFailed": 12,
+    "totalFailedRechecks": 57,
+    "recoveryRate": "78.9"
+  },
+  "timestamp": "2025-01-12T10:30:00Z"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/url-checks/recovered</span>
+                </div>
+                <p><strong>Purpose:</strong> Get URLs that recovered from failed to active status</p>
+                
+                <h4><i class="fas fa-filter"></i> Query Parameters:</h4>
+                <div class="code-block">
+GET /api/url-checks/recovered?limit=50&offset=0
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "data": [
+    {
+      "id": "uuid",
+      "business_name": "Recovered Business",
+      "status": "active",
+      "previous_status": "failed"
+    }
+  ],
+  "pagination": {
+    "total": 45,
+    "limit": 50,
+    "offset": 0,
+    "hasMore": false
+  }
+}
+                </div>
+            </div>
+
+            <h3><i class="fas fa-upload"></i> Advanced Import Management</h3>
+            
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/import-csv/cancel</span>
+                </div>
+                <p><strong>Purpose:</strong> Cancel an ongoing CSV import operation</p>
+                
+                <h4><i class="fas fa-code"></i> Request Body:</h4>
+                <div class="code-block">
+{
+  "importId": "import_1642095234567_xyz789"
+}
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Import cancelled successfully",
+  "cancelled": true,
+  "importId": "import_1642095234567_xyz789"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/import-csv/progress/clear</span>
+                </div>
+                <p><strong>Purpose:</strong> Clear progress tracking for a specific import</p>
+                
+                <h4><i class="fas fa-code"></i> Request Body:</h4>
+                <div class="code-block">
+{
+  "importId": "import_1642095234567_xyz789"
+}
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Progress cleared successfully"
+}
+                </div>
+            </div>
+
+            <h3><i class="fas fa-cogs"></i> Bulk Operations Control</h3>
+            
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/bulk-check/filtered/status</span>
+                </div>
+                <p><strong>Purpose:</strong> Get status of all filtered bulk operations</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "total_processes": 5,
+  "running_processes": 2,
+  "paused_processes": 1,
+  "stopped_processes": 1,
+  "completed_processes": 1,
+  "processes": [
+    {
+      "progress_id": "bulk_123",
+      "total": 100,
+      "processed": 45,
+      "status": "running",
+      "progress_percentage": 45
+    }
+  ]
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/bulk-check/filtered/control</span>
+                </div>
+                <p><strong>Purpose:</strong> Control filtered bulk operations (pause, resume, stop)</p>
+                
+                <h4><i class="fas fa-filter"></i> Query Parameters:</h4>
+                <div class="code-block">
+POST /api/bulk-check/filtered/control?progress_id=bulk_123&action=pause
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Filtered bulk check paused successfully",
+  "progress_id": "bulk_123",
+  "status": "paused"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/bulk-check/filtered/cleanup</span>
+                </div>
+                <p><strong>Purpose:</strong> Clean up hanging and old bulk processes</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Cleaned up 3 hanging processes",
+  "stopped_count": 3,
+  "remaining_processes": 2
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/bulk-check/filtered/urls</span>
+                </div>
+                <p><strong>Purpose:</strong> Get URLs with specific status from a bulk process</p>
+                
+                <h4><i class="fas fa-filter"></i> Query Parameters:</h4>
+                <div class="code-block">
+GET /api/bulk-check/filtered/urls?progress_id=bulk_123&status=failed
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+[
+  {
+    "id": "uuid",
+    "business_name": "Failed Business",
+    "status": "failed",
+    "error_message": "Link not found"
+  }
+]
+                </div>
+            </div>
+
+            <h3><i class="fas fa-shield-alt"></i> Emergency & Maintenance</h3>
+            
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/emergency/cleanup</span>
+                </div>
+                <p><strong>Purpose:</strong> Emergency cleanup of all processes and stuck URLs</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "message": "Emergency cleanup completed",
+  "stoppedProcesses": 5
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/emergency/cleanup</span>
+                </div>
+                <p><strong>Purpose:</strong> Get status of active processes</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "activeProcesses": [
+    {
+      "progress_id": "bulk_123",
+      "status": "running",
+      "started_at": "2025-01-12T10:00:00Z"
+    }
+  ],
+  "count": 1
+}
+                </div>
+            </div>
 
             <div class="info">
                 <h4><i class="fas fa-check-circle"></i> Success Codes:</h4>
@@ -1192,10 +1764,6 @@ GET /api/stats/filtered?status=failed&anchorTextType=csv
                 <div class="stat-card">
                     <span class="stat-number">100GB</span>
                     <div class="stat-label">SSD Storage</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">$48</span>
-                    <div class="stat-label">Monthly Cost</div>
                 </div>
             </div>
             
@@ -1499,10 +2067,8 @@ curl -X GET http://localhost:3000/api/test-env
 
         <div class="footer">
             <h3><i class="fas fa-graduation-cap"></i> Documentation Information</h3>
-            <p><strong>Document Version:</strong> 1.0 | <strong>Last Updated:</strong> January 2025</p>
+            <p><strong>Document Version:</strong> 1.0 | <strong>Last Updated:</strong> August 12, 2025</p>
             <p><strong>LinkChecker Version:</strong> V4 | <strong>Compatibility:</strong> Next.js 15.4.4, Node.js 18+</p>
-            <br>
-            <p><i class="fas fa-heart" style="color: #e74c3c;"></i> Built with care for seamless business link verification</p>
         </div>
     </div>
 
@@ -1566,3 +2132,4 @@ curl -X GET http://localhost:3000/api/test-env
     </script>
 </body>
 </html>
+
