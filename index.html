@@ -450,7 +450,7 @@
             
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-number">38+</span>
+                    <span class="stat-number">50+</span>
                     <div class="stat-label">API Endpoints</div>
                 </div>
                 <div class="stat-card">
@@ -561,7 +561,11 @@
         </div>
 
         <div id="api" class="section api">
-            <h2><i class="fas fa-plug icon"></i> API Endpoints</h2>
+            <h2><i class="fas fa-plug icon"></i> API Endpoints - Complete Integration Guide</h2>
+            
+            <div class="info">
+                <i class="fas fa-info-circle"></i> <strong>Base URL:</strong> https://your-linkchecker-domain.com
+            </div>
             
             <h3><i class="fas fa-search"></i> Core Link Checking</h3>
             
@@ -570,15 +574,67 @@
                     <span class="method post">POST</span>
                     <span class="endpoint-path">/api/url-checks/check</span>
                 </div>
-                <p><strong>Purpose:</strong> Unified endpoint for single and bulk URL checking</p>
+                <p><strong>Purpose:</strong> Unified endpoint for single and bulk URL checking with real-time progress tracking</p>
+                
+                <h4><i class="fas fa-code"></i> Request Body:</h4>
                 <div class="code-block">
 {
-  "urlIds": ["uuid1", "uuid2"],
-  "type": "bulk",
-  "filters": { "status": "failed" },
+  "urlIds": ["uuid1", "uuid2", "uuid3"],
+  "type": "single" | "bulk",
+  "filters": {
+    "status": "failed" | "active" | "pending" | "processing" | "target_url_wrong" | "anchor_text_wrong",
+    "anchorTextType": "csv" | "auto" | "all",
+    "search": "business name search term",
+    "previousStatus": "failed" | "active" | "pending",
+    "fulfilledOnFrom": "2025-01-01T00:00:00Z",
+    "fulfilledOnTo": "2025-12-31T23:59:59Z"
+  },
   "quantity": 100
 }
                 </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response (Single Check):</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "type": "single",
+  "result": {
+    "id": "cc617a63-3876-4d38-a73c-5aa54be70df1",
+    "success": true,
+    "result": {
+      "isActive": true,
+      "statusCode": 200,
+      "responseTime": 1250,
+      "actualTargetUrl": "https://www.example.com/",
+      "detectedAnchorText": "Visit Website",
+      "foundTargetLink": true,
+      "errorMessage": null
+    }
+  },
+  "message": "Single check completed"
+}
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response (Bulk Check):</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "type": "bulk",
+  "progress_id": "bulk_1642095234567_abc123",
+  "processing_urls": ["uuid1", "uuid2", "uuid3"],
+  "message": "Bulk check started successfully"
+}
+                </div>
+
+                <h4><i class="fas fa-cogs"></i> Concurrency & Performance:</h4>
+                <ul>
+                    <li><strong>Single checks:</strong> 1 concurrent worker, immediate response</li>
+                    <li><strong>Bulk checks:</strong> 10 concurrent workers (dynamic semaphore pool)</li>
+                    <li><strong>Progress tracking:</strong> Real-time updates via progress_id</li>
+                    <li><strong>Filter validation:</strong> URLs validated against filters before processing</li>
+                    <li><strong>Timeout:</strong> 45-90 seconds per URL (depending on page complexity)</li>
+                    <li><strong>Rate limiting:</strong> Built-in to prevent system overload</li>
+                </ul>
             </div>
             
             <div class="endpoint-card">
@@ -586,12 +642,164 @@
                     <span class="method get">GET</span>
                     <span class="endpoint-path">/api/url-checks</span>
                 </div>
-                <p><strong>Purpose:</strong> Retrieve URL checks with filtering and pagination</p>
-                <div class="success">
-                    <i class="fas fa-check-circle"></i> Supports advanced filtering by status, business name, date ranges, and anchor text source.
+                <p><strong>Purpose:</strong> Retrieve URL checks with advanced filtering, sorting, and pagination</p>
+                
+                <h4><i class="fas fa-filter"></i> Query Parameters:</h4>
+                <div class="code-block">
+GET /api/url-checks?search=business&status=active&limit=50&offset=0
+&anchorTextType=csv&previousStatus=failed
+&fulfilledOnFrom=2025-01-01T00:00:00Z
+&fulfilledOnTo=2025-12-31T23:59:59Z
+&progress_id=bulk_1642095234567_abc123
+                </div>
+
+                <h4><i class="fas fa-table"></i> Available Filters:</h4>
+                <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                    <thead>
+                        <tr style="background: rgba(255,255,255,0.1);">
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid rgba(255,255,255,0.2);">Parameter</th>
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid rgba(255,255,255,0.2);">Type</th>
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid rgba(255,255,255,0.2);">Description</th>
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid rgba(255,255,255,0.2);">Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">search</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">string</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Search in business_name, thank_you_url, target_url</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">?search=business</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">status</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">enum</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">active, failed, processing, pending, target_url_wrong, anchor_text_wrong</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">?status=active</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">previousStatus</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">enum</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Filter by status before last recheck</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">?previousStatus=failed</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">anchorTextType</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">enum</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">csv (from import), auto (detected), all</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">?anchorTextType=csv</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">fulfilledOnFrom</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">ISO date</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Filter by fulfilled_on date (start)</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">?fulfilledOnFrom=2025-01-01T00:00:00Z</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">progress_id</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">string</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Filter URLs from specific bulk process</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">?progress_id=bulk_123</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">limit</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">number</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Max records to return</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">?limit=100</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">offset</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">number</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Pagination offset</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">?offset=50</td></tr>
+                    </tbody>
+                </table>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+[
+  {
+    "id": "cc617a63-3876-4d38-a73c-5aa54be70df1",
+    "row_id": 475,
+    "business_name": "Example Business",
+    "thank_you_url": "https://directory.com/business/example",
+    "anchor_text": "Visit Website",
+    "target_url": "https://www.example.com/",
+    "target_url_found": "https://www.example.com/",
+    "status": "active",
+    "previous_status": "failed",
+    "last_checked": "2025-01-12T04:08:41.793Z",
+    "fulfilled_on": "2025-01-10T15:45:00Z",
+    "response_time": 1250,
+    "error_message": null,
+    "http_status_code": 200,
+    "detected_anchor_text": "Visit Website",
+    "anchor_text_source": "csv",
+    "notes": null,
+    "created_at": "2025-01-01T12:00:00Z",
+    "updated_at": "2025-01-12T04:08:41.793Z"
+  }
+]
                 </div>
             </div>
             
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/url-checks</span>
+                </div>
+                <p><strong>Purpose:</strong> Create new URL check records programmatically</p>
+                
+                <h4><i class="fas fa-code"></i> Request Body:</h4>
+                <div class="code-block">
+{
+  "row_id": 475,
+  "business_name": "Example Business",
+  "thank_you_url": "https://directory.com/business/example-business",
+  "anchor_text": "Visit Website",
+  "target_url": "https://example.com"
+}
+                </div>
+
+                <h4><i class="fas fa-exclamation-triangle"></i> Required Fields:</h4>
+                <ul>
+                    <li><strong>business_name:</strong> Name of the business (string)</li>
+                    <li><strong>thank_you_url:</strong> URL where the business is listed (valid URL)</li>
+                    <li><strong>target_url:</strong> Expected destination URL (valid URL)</li>
+                </ul>
+
+                <h4><i class="fas fa-info-circle"></i> Optional Fields:</h4>
+                <ul>
+                    <li><strong>row_id:</strong> Reference to CSV import row (number)</li>
+                    <li><strong>anchor_text:</strong> Expected link text (defaults to "Website")</li>
+                </ul>
+
+                <h4><i class="fas fa-arrow-right"></i> Response (201 Created):</h4>
+                <div class="code-block">
+{
+  "id": "new-uuid-generated",
+  "row_id": 475,
+  "business_name": "Example Business",
+  "thank_you_url": "https://directory.com/business/example-business",
+  "anchor_text": "Visit Website",
+  "target_url": "https://example.com",
+  "status": "pending",
+  "created_at": "2025-01-12T10:30:00Z",
+  "updated_at": "2025-01-12T10:30:00Z"
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/url-checks/count</span>
+                </div>
+                <p><strong>Purpose:</strong> Get count of URL checks matching filters (same filters as /api/url-checks)</p>
+                
+                <h4><i class="fas fa-filter"></i> Query Parameters:</h4>
+                <div class="code-block">
+GET /api/url-checks/count?status=active&anchorTextType=csv
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "count": 1234
+}
+                </div>
+            </div>
+
+            <h3><i class="fas fa-chart-line"></i> Progress Tracking</h3>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/bulk-check/filtered/progress</span>
+                </div>
+                <p><strong>Purpose:</strong> Track progress of bulk operations in real-time</p>
+                
+                <h4><i class="fas fa-filter"></i> Query Parameters:</h4>
+                <div class="code-block">
+GET /api/bulk-check/filtered/progress?progress_id=bulk_1642095234567_abc123
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "progress_id": "bulk_1642095234567_abc123",
+  "status": "running" | "completed" | "error" | "cancelled",
+  "total": 150,
+  "processed": 75,
+  "percentage": 50,
+  "start_time": "2025-01-12T10:00:00Z",
+  "estimated_completion": "2025-01-12T10:15:00Z",
+  "current_batch": 8,
+  "total_batches": 15
+}
+                </div>
+            </div>
+
             <h3><i class="fas fa-upload"></i> Data Management</h3>
             
             <div class="endpoint-card">
@@ -599,9 +807,53 @@
                     <span class="method post">POST</span>
                     <span class="endpoint-path">/api/import-csv</span>
                 </div>
-                <p><strong>Purpose:</strong> Import business data from CSV files</p>
-                <div class="highlight">
-                    <strong>Required CSV Columns:</strong> Client, Thank You URL, Anchor Text, Link Target
+                <p><strong>Purpose:</strong> Import business data from CSV files with progress tracking</p>
+                
+                <h4><i class="fas fa-file"></i> Request (Multipart Form):</h4>
+                <div class="code-block">
+Content-Type: multipart/form-data
+
+file: [CSV file]
+                </div>
+
+                <h4><i class="fas fa-table"></i> Required CSV Columns:</h4>
+                <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                    <thead>
+                        <tr style="background: rgba(255,255,255,0.1);">
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid rgba(255,255,255,0.2);">Column Name</th>
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid rgba(255,255,255,0.2);">Description</th>
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid rgba(255,255,255,0.2);">Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Client</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Business name</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Example Business</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Thank You URL</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Business listing URL</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">https://directory.com/business/example</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Anchor Text</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Expected link text</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Visit Website</td></tr>
+                        <tr><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Link Target</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">Expected destination URL</td><td style="padding: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">https://www.example.com</td></tr>
+                    </tbody>
+                </table>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "Import started",
+  "importId": "import_1642095234567_xyz789",
+  "total": 0
+}
+                </div>
+
+                <h4><i class="fas fa-chart-line"></i> Progress Tracking:</h4>
+                <div class="code-block">
+GET /api/import-csv/progress?importId=import_1642095234567_xyz789
+
+Response:
+{
+  "total": 1000,
+  "processed": 500,
+  "status": "processing" | "completed" | "error" | "cancelled",
+  "message": "Processing 500/1000 rows...",
+  "log": "[10:30:15] Batch 5: 50/50 records imported"
+}
                 </div>
             </div>
             
@@ -610,15 +862,66 @@
                     <span class="method get">GET</span>
                     <span class="endpoint-path">/api/export-csv/all</span>
                 </div>
-                <p><strong>Purpose:</strong> Export all URL checks to CSV format</p>
+                <p><strong>Purpose:</strong> Export all URL checks to CSV format with pagination support</p>
+                
+                <h4><i class="fas fa-download"></i> Response:</h4>
+                <div class="code-block">
+Content-Type: text/csv
+Content-Disposition: attachment; filename="url-checks-all-2025-01-12.csv"
+
+ID,Row ID,Business Name,Thank You URL,Anchor Text,...
+uuid1,475,Example Business,https://directory.com/example,Visit Website,...
+                </div>
+
+                <h4><i class="fas fa-info-circle"></i> Features:</h4>
+                <ul>
+                    <li><strong>Pagination:</strong> Automatic handling of large datasets (>1000 records)</li>
+                    <li><strong>Complete data:</strong> All fields including timestamps and metadata</li>
+                    <li><strong>CSV format:</strong> Standard comma-separated with proper escaping</li>
+                    <li><strong>Filename:</strong> Includes date for easy organization</li>
+                </ul>
             </div>
             
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/export-csv/filtered</span>
+                </div>
+                <p><strong>Purpose:</strong> Export filtered URL checks (same filters as /api/url-checks)</p>
+                
+                <h4><i class="fas fa-filter"></i> Query Parameters:</h4>
+                <div class="code-block">
+GET /api/export-csv/filtered?status=active&anchorTextType=csv
+&fulfilledOnFrom=2025-01-01T00:00:00Z
+                </div>
+
+                <h4><i class="fas fa-download"></i> Response:</h4>
+                <div class="code-block">
+Content-Type: text/csv
+Content-Disposition: attachment; filename="url-checks-filtered-2025-01-12.csv"
+                </div>
+            </div>
+
             <div class="endpoint-card">
                 <div class="endpoint-header">
                     <span class="method get">GET</span>
                     <span class="endpoint-path">/api/export-pdf</span>
                 </div>
                 <p><strong>Purpose:</strong> Generate PDF report with charts and summaries</p>
+                
+                <h4><i class="fas fa-download"></i> Response:</h4>
+                <div class="code-block">
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="link-checker-report-2025-01-12.pdf"
+                </div>
+
+                <h4><i class="fas fa-info-circle"></i> Features:</h4>
+                <ul>
+                    <li><strong>Charts:</strong> Visual statistics and progress charts</li>
+                    <li><strong>Summary tables:</strong> Categorized URL status summaries</li>
+                    <li><strong>Formatted layout:</strong> Professional PDF layout</li>
+                    <li><strong>Timestamp:</strong> Report generation date and time</li>
+                </ul>
             </div>
             
             <h3><i class="fas fa-chart-bar"></i> Analytics and Monitoring</h3>
@@ -636,7 +939,183 @@
   "failed_links": 600,
   "target_url_wrong_links": 150,
   "anchor_text_wrong_links": 50,
-  "processing_links": 0
+  "processing_links": 0,
+  "last_updated": "2025-01-12T10:30:00Z"
+}
+                </div>
+
+                <h4><i class="fas fa-info-circle"></i> Statistics Breakdown:</h4>
+                <ul>
+                    <li><strong>total_urls:</strong> Total URL checks in system</li>
+                    <li><strong>active_links:</strong> Links that are working correctly</li>
+                    <li><strong>failed_links:</strong> Links that are completely broken</li>
+                    <li><strong>target_url_wrong_links:</strong> Links found but pointing to wrong URL</li>
+                    <li><strong>anchor_text_wrong_links:</strong> Links found but with wrong anchor text</li>
+                    <li><strong>processing_links:</strong> Links currently being checked</li>
+                </ul>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/stats/filtered</span>
+                </div>
+                <p><strong>Purpose:</strong> Get statistics for filtered dataset (same filters as /api/url-checks)</p>
+                
+                <h4><i class="fas fa-filter"></i> Query Parameters:</h4>
+                <div class="code-block">
+GET /api/stats/filtered?status=failed&anchorTextType=csv
+&fulfilledOnFrom=2025-01-01T00:00:00Z
+                </div>
+
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "total_urls": 150,
+  "active_links": 120,
+  "failed_links": 20,
+  "target_url_wrong_links": 8,
+  "anchor_text_wrong_links": 2,
+  "processing_links": 0,
+  "filters_applied": {
+    "status": "failed",
+    "anchorTextType": "csv",
+    "fulfilledOnFrom": "2025-01-01T00:00:00Z"
+  },
+  "last_updated": "2025-01-12T10:30:00Z"
+}
+                </div>
+            </div>
+
+            <h3><i class="fas fa-heart-rate"></i> Health & Monitoring</h3>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/test-env</span>
+                </div>
+                <p><strong>Purpose:</strong> Environment configuration validation and health check</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "status": "healthy",
+  "database": "connected",
+  "link_checker_version": "v4",
+  "environment": "production",
+  "timestamp": "2025-01-12T10:30:00Z",
+  "config": {
+    "max_concurrent_requests": 50,
+    "request_timeout": 30000,
+    "use_local_storage": false
+  }
+}
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/processing-status</span>
+                </div>
+                <p><strong>Purpose:</strong> Monitor active processing operations and system load</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "active_processes": 2,
+  "active_workers": 7,
+  "max_workers": 10,
+  "queue_size": 15,
+  "current_operations": [
+    {
+      "progress_id": "bulk_1642095234567_abc123",
+      "type": "bulk_check",
+      "status": "running",
+      "started_at": "2025-01-12T10:25:00Z",
+      "processed": 45,
+      "total": 100
+    }
+  ],
+  "system_load": {
+    "cpu_usage": "45%",
+    "memory_usage": "3.2GB/8GB",
+    "active_browsers": 3
+  }
+}
+                </div>
+            </div>
+
+            <h3><i class="fas fa-stop-circle"></i> Emergency Controls</h3>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/emergency-stop</span>
+                </div>
+                <p><strong>Purpose:</strong> Emergency stop all processing operations</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "message": "Emergency stop initiated",
+  "stopped_processes": 3,
+  "stopped_workers": 7,
+  "timestamp": "2025-01-12T10:30:00Z"
+}
+                </div>
+
+                <div class="warning">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Warning:</strong> This will immediately stop all active link checking operations. Use only in emergency situations.
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method delete">DELETE</span>
+                    <span class="endpoint-path">/api/clear-all-data</span>
+                </div>
+                <p><strong>Purpose:</strong> Clear all system data (URLs, logs, statistics)</p>
+                
+                <h4><i class="fas fa-arrow-right"></i> Response:</h4>
+                <div class="code-block">
+{
+  "message": "All data cleared successfully"
+}
+                </div>
+
+                <div class="warning">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Warning:</strong> This operation is irreversible and will delete all URL checks, logs, and statistics.
+                </div>
+            </div>
+
+            <h3><i class="fas fa-code"></i> Status Codes & Error Handling</h3>
+
+            <div class="info">
+                <h4><i class="fas fa-check-circle"></i> Success Codes:</h4>
+                <ul>
+                    <li><strong>200 OK:</strong> Request successful</li>
+                    <li><strong>201 Created:</strong> Resource created successfully</li>
+                    <li><strong>202 Accepted:</strong> Request accepted for processing</li>
+                </ul>
+
+                <h4><i class="fas fa-exclamation-triangle"></i> Error Codes:</h4>
+                <ul>
+                    <li><strong>400 Bad Request:</strong> Invalid request parameters</li>
+                    <li><strong>404 Not Found:</strong> Resource not found</li>
+                    <li><strong>429 Too Many Requests:</strong> Rate limit exceeded</li>
+                    <li><strong>500 Internal Server Error:</strong> Server error</li>
+                    <li><strong>503 Service Unavailable:</strong> System overloaded</li>
+                </ul>
+
+                <h4><i class="fas fa-format-list-bulleted"></i> Error Response Format:</h4>
+                <div class="code-block">
+{
+  "error": "Descriptive error message",
+  "details": "Additional error details if available",
+  "timestamp": "2025-01-12T10:30:00Z",
+  "request_id": "req_1642095234567"
 }
                 </div>
             </div>
