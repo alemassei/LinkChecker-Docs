@@ -1883,24 +1883,29 @@ GET /api/bulk-check/filtered/urls?progress_id=bulk_123&status=failed
         <div id="deployment" class="section deployment">
             <h2><i class="fas fa-cloud icon"></i> Deployment Architecture</h2>
             
-            <h3><i class="fab fa-digital-ocean"></i> DigitalOcean Droplet Setup</h3>
+            <div class="info">
+                <i class="fas fa-info-circle"></i> <strong>Note:</strong> This section provides suggested deployment configurations and best practices. The actual implementation may vary based on your specific infrastructure and requirements.
+            </div>
+            
+            <h3><i class="fas fa-server"></i> Recommended Server Specifications</h3>
             
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-number">4</span>
+                    <span class="stat-number">4+</span>
                     <div class="stat-label">vCPU Cores</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number">8GB</span>
+                    <span class="stat-number">8GB+</span>
                     <div class="stat-label">RAM Memory</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number">100GB</span>
+                    <span class="stat-number">100GB+</span>
                     <div class="stat-label">SSD Storage</div>
                 </div>
             </div>
             
-            <h4><i class="fab fa-docker"></i> Docker Configuration</h4>
+            <h4><i class="fab fa-docker"></i> Docker Configuration Example</h4>
+            <p><em>Suggested Dockerfile for containerized deployment:</em></p>
             <div class="code-block">
 FROM node:18-alpine
 
@@ -1920,9 +1925,30 @@ EXPOSE 3000
 CMD ["npm", "start"]
             </div>
             
-            <h4><i class="fas fa-network-wired"></i> Nginx Configuration</h4>
+            <h4><i class="fas fa-network-wired"></i> Reverse Proxy Configuration</h4>
+            <p><em>Recommended setup with Nginx or similar reverse proxy:</em></p>
             <div class="info">
-                <i class="fas fa-info-circle"></i> Configured as reverse proxy with SSL termination and load balancing capabilities.
+                <i class="fas fa-info-circle"></i> Configure as reverse proxy with SSL termination and load balancing capabilities for production environments.
+            </div>
+            
+            <h4><i class="fas fa-cloud"></i> Cloud Deployment Options</h4>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h5><i class="fab fa-aws"></i> AWS</h5>
+                    <p>EC2 instances with Auto Scaling Groups, RDS for database, and CloudFront for CDN.</p>
+                </div>
+                <div class="tech-card">
+                    <h5><i class="fab fa-google"></i> Google Cloud</h5>
+                    <p>Compute Engine VMs, Cloud SQL, and Load Balancer for high availability.</p>
+                </div>
+                <div class="tech-card">
+                    <h5><i class="fab fa-digital-ocean"></i> DigitalOcean</h5>
+                    <p>Droplets with managed databases and load balancers for cost-effective scaling.</p>
+                </div>
+                <div class="tech-card">
+                    <h5><i class="fab fa-azure"></i> Azure</h5>
+                    <p>Virtual Machines with Azure Database and Application Gateway for enterprise deployments.</p>
+                </div>
             </div>
         </div>
 
